@@ -1,8 +1,0 @@
-.formControlErrorMessage {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.formControlErrorMessage > .errorMessage {
-  position: absolute;
-}
