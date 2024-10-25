@@ -1,28 +1,18 @@
-import { Box, useRadio } from "@chakra-ui/react";
+import s from "./RadioCard.module.css";
 
-function RadioCard(props) {
-  const { getInputProps, getRadioProps } = useRadio(props);
-
-  const input = getInputProps();
-  const checkbox = getRadioProps();
-
+function RadioCard({ value, name, checked, onChange }) {
   return (
-    <Box as="label">
-      <input {...input} />
-      <Box
-        {...checkbox}
-        w="40px"
-        h="40px"
-        background={props.value}
-        borderRadius={"50%"}
-        cursor={"pointer"}
-        _checked={{
-          borderWidth: "3px",
-          borderStyle: "solid",
-          borderColor: "green.400",
-        }}
+    <label>
+      <input
+        type="radio"
+        checked={checked}
+        className={s.input}
+        name={name}
+        value={value}
+        onChange={() => onChange(name, value)}
       />
-    </Box>
+      <span className={s.radiobox} style={{ backgroundColor: value }} />
+    </label>
   );
 }
 
