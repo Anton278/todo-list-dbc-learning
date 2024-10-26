@@ -1,10 +1,10 @@
-import { makeObservable, observable, action } from "mobx";
+import { makeObservable, observable, action, autorun } from "mobx";
 import { v4 as uuidv4 } from "uuid";
 
 import { TODOS } from "../../utils/lsKeys";
 import getFromLocalStorage from "../../utils/getFromLocalStorage";
 
-class Todos {
+class TodosState {
   todos = [];
 
   constructor() {
@@ -30,5 +30,10 @@ class Todos {
   }
 }
 
-const todos = new Todos();
-export default todos;
+const todosState = new TodosState();
+
+autorun(() => {
+  localStorage.setItem(TODOS, JSON.stringify(todosState.todos));
+});
+
+export default todosState;
