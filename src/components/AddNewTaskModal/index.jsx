@@ -94,7 +94,12 @@ function AddNewTaskModal({ isOpen, onClose }) {
           />
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="teal" mr={3} variant={"outline"}>
+          <Button
+            colorScheme="teal"
+            mr={3}
+            variant={"outline"}
+            onClick={onClose}
+          >
             Close
           </Button>
           <Button colorScheme="teal" type="submit" form={id}>

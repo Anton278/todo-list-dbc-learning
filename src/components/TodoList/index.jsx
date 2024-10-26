@@ -9,7 +9,7 @@ function TodoList() {
     <VStack spacing={3} alignItems="stretch">
       {todosState.todos.length ? (
         todosState.todos.map((todo) => (
-          <Card title={todo.title} color={todo.color} key={todo.id} />
+          <Card title={todo.name} color={todo.color} key={todo.id} />
         ))
       ) : (
         <Text textAlign="center" mt={8}>
