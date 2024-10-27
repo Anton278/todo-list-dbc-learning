@@ -19,6 +19,7 @@ import { useId } from "react";
 import RadioCard from "./RadioCard";
 import todosState from "../../appState/todos/todos";
 import Input from "../Input";
+import validate from "./utils/validate";
 
 function AddNewTaskModal({ isOpen, onClose }) {
   const id = useId();
@@ -29,22 +30,13 @@ function AddNewTaskModal({ isOpen, onClose }) {
     theme.colors.blue[400],
   ];
 
-  const validate = (values) => {
-    const errors = {};
-
-    if (values.name?.length < 2) {
-      errors.name = "Task name must be min 2 characters";
-    }
-    if (!values.name?.length) {
-      errors.name = "Task name is required";
-    }
-
-    return errors;
-  };
-
   const onSubmit = (values) => {
     todosState.addTodo(values.name, values.color);
-    console.log("submitted: ", values);
+  };
+
+  const initialValues = {
+    name: "",
+    color: colors[2],
   };
 
   return (
@@ -55,14 +47,11 @@ function AddNewTaskModal({ isOpen, onClose }) {
         <ModalCloseButton />
         <ModalBody>
           <Form
-            initialValues={{
-              name: "",
-              color: colors[2],
-            }}
+            initialValues={initialValues}
             onSubmit={onSubmit}
             validate={validate}
-            render={(props) => (
-              <form id={id} onSubmit={props.handleSubmit}>
+            render={({ handleSubmit, values, form }) => (
+              <form id={id} onSubmit={handleSubmit}>
                 <div style={{ marginBottom: 10 }}>
                   <Input
                     name="name"
@@ -76,14 +65,14 @@ function AddNewTaskModal({ isOpen, onClose }) {
                     Color
                   </FormLabel>
                   <HStack>
-                    {colors.map((color, i) => {
+                    {colors.map((color) => {
                       return (
                         <RadioCard
                           key={color}
-                          checked={color === props.values.color}
+                          checked={color === values.color}
                           value={color}
                           name="color"
-                          onChange={props.form.change}
+                          onChange={form.change}
                         />
                       );
                     })}

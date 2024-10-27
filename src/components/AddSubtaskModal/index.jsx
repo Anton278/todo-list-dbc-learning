@@ -18,22 +18,10 @@ import { v4 as uuidv4 } from "uuid";
 
 import Input from "../../components/Input";
 import todosState from "../../appState/todos/todos";
+import validate from "./utils/validate";
 
 function AddSubtaskModal({ isOpen, onClose, todoId }) {
   const id = useId();
-
-  const validate = (values) => {
-    const errors = {};
-
-    if (values.name?.length < 2) {
-      errors.name = "Task name must be min 2 characters";
-    }
-    if (!values.name?.length) {
-      errors.name = "Task name is required";
-    }
-
-    return errors;
-  };
 
   const onSubmit = ({ name, deadline }) => {
     const todo = todosState.todos.find((todo) => todo.id === todoId);
@@ -70,9 +58,8 @@ function AddSubtaskModal({ isOpen, onClose, todoId }) {
             }}
             onSubmit={onSubmit}
             validate={validate}
-            render={(props) => (
-              <form id={id} onSubmit={props.handleSubmit}>
-                {console.log(props.values)}
+            render={({ handleSubmit, values, form }) => (
+              <form id={id} onSubmit={handleSubmit}>
                 <div style={{ marginBottom: 10 }}>
                   <Input
                     name="name"
@@ -81,25 +68,21 @@ function AddSubtaskModal({ isOpen, onClose, todoId }) {
                   />
                 </div>
 
-                <div>
-                  <Field name={"deadline"}>
-                    {({ input }) => (
-                      <FormControl>
-                        <FormLabel style={{ width: "fit-content" }}>
-                          Deadline
-                        </FormLabel>
-                        <DatePicker
-                          selected={props.values.deadline}
-                          onChange={(date) =>
-                            props.form.change("deadline", date)
-                          }
-                          customInput={<ChakraInput {...input} />}
-                          minDate={new Date()}
-                        />
-                      </FormControl>
-                    )}
-                  </Field>
-                </div>
+                <Field name={"deadline"}>
+                  {({ input }) => (
+                    <FormControl>
+                      <FormLabel style={{ width: "fit-content" }}>
+                        Deadline
+                      </FormLabel>
+                      <DatePicker
+                        selected={values.deadline}
+                        onChange={(date) => form.change("deadline", date)}
+                        customInput={<ChakraInput {...input} />}
+                        minDate={new Date()}
+                      />
+                    </FormControl>
+                  )}
+                </Field>
               </form>
             )}
           />
