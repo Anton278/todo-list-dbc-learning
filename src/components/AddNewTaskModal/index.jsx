@@ -32,6 +32,7 @@ function AddNewTaskModal({ isOpen, onClose }) {
 
   const onSubmit = (values) => {
     todosState.addTodo(values.name, values.color);
+    onClose();
   };
 
   const initialValues = {

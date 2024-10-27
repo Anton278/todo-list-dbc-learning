@@ -19,15 +19,13 @@ import { v4 as uuidv4 } from "uuid";
 import Input from "../../components/Input";
 import todosState from "../../appState/todos/todos";
 import validate from "./utils/validate";
+import { selectTodoById } from "../../appState/todos/selectors";
 
 function AddSubtaskModal({ isOpen, onClose, todoId }) {
   const id = useId();
+  const todo = selectTodoById(todoId);
 
   const onSubmit = ({ name, deadline }) => {
-    const todo = todosState.todos.find((todo) => todo.id === todoId);
-    if (!todo) {
-      return;
-    }
     const { subTodos } = todo;
 
     let id = uuidv4();
@@ -38,10 +36,13 @@ function AddSubtaskModal({ isOpen, onClose, todoId }) {
       isUniqueId = !subTodos.find((todo) => todo.id === id);
     }
 
-    todosState.updateTodo(todoId, {
+    const updatedTodo = {
       ...todo,
       subTodos: [...subTodos, { name, deadline: deadline.toUTCString(), id }],
-    });
+    };
+    todosState.updateTodo(todoId, updatedTodo);
+
+    onClose();
   };
 
   return (

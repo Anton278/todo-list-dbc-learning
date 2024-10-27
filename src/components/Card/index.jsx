@@ -1,5 +1,6 @@
 import { Box, Card as ChakraCard, CardBody, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { PAGES_PATHNAMES } from "../../utils/pagesPathnames";
 
 function Card({ title, color, deadline, id }) {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ function Card({ title, color, deadline, id }) {
       return;
     }
 
-    navigate(`/todos/${id}`);
+    navigate(`${PAGES_PATHNAMES.TODOS}/${id}`);
   };
 
   return (
