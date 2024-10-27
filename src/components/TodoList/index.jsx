@@ -1,7 +1,7 @@
 import { VStack, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 
-import Card from "./Card";
+import Card from "../Card";
 import todosState from "../../appState/todos/todos";
 
 function TodoList() {
@@ -9,7 +9,12 @@ function TodoList() {
     <VStack spacing={3} alignItems="stretch">
       {todosState.todos.length ? (
         todosState.todos.map((todo) => (
-          <Card title={todo.name} color={todo.color} key={todo.id} />
+          <Card
+            title={todo.name}
+            color={todo.color}
+            key={todo.id}
+            id={todo.id}
+          />
         ))
       ) : (
         <Text textAlign="center" mt={8}>
