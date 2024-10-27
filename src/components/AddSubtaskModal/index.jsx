@@ -14,12 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { Form, Field } from "react-final-form";
 import DatePicker from "react-datepicker";
+import { v4 as uuidv4 } from "uuid";
 
 import Input from "../../components/Input";
+import todosState from "../../appState/todos/todos";
 
-function AddSubtaskModal({ isOpen, onClose }) {
+function AddSubtaskModal({ isOpen, onClose, todoId }) {
   const id = useId();
-  const [startDate, setStartDate] = useState(new Date());
 
   const validate = (values) => {
     const errors = {};
@@ -34,9 +35,25 @@ function AddSubtaskModal({ isOpen, onClose }) {
     return errors;
   };
 
-  const onSubmit = (values) => {
-    // todosState.addTodo(values.name, values.color);
-    console.log("submitted: ", values);
+  const onSubmit = ({ name, deadline }) => {
+    const todo = todosState.todos.find((todo) => todo.id === todoId);
+    if (!todo) {
+      return;
+    }
+    const { subTodos } = todo;
+
+    let id = uuidv4();
+    let isUniqueId = subTodos.find((subTodo) => subTodo.id === id);
+
+    while (!isUniqueId) {
+      id = uuidv4();
+      isUniqueId = !subTodos.find((todo) => todo.id === id);
+    }
+
+    todosState.updateTodo(todoId, {
+      ...todo,
+      subTodos: [...subTodos, { name, deadline: deadline.toUTCString(), id }],
+    });
   };
 
   return (

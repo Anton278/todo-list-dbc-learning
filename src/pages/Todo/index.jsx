@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Container,
@@ -6,27 +5,21 @@ import {
   Divider,
   HStack,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Input as ChakraInput,
-  FormControl,
-  FormLabel,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 
 import Header from "../../components/Header";
 import AddSubtaskModal from "../../components/AddSubtaskModal";
 import Card from "../../components/Card";
+import { selectTodoById } from "../../appState/todos/selectors";
 
 function TodoPage() {
   const { id } = useParams();
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const todo = selectTodoById(id);
 
   return (
     <>
@@ -46,11 +39,11 @@ function TodoPage() {
             width: 24,
             height: 24,
             borderRadius: "50%",
-            backgroundColor: "red",
+            backgroundColor: todo.color,
             marginRight: "12px",
           }}
         />
-        Create grossery list - Subtasks
+        {todo.name} - Subtasks
       </Heading>
       <Divider />
       <Container mb={3}>
@@ -60,21 +53,18 @@ function TodoPage() {
           </Button>
         </HStack>
         <VStack spacing={3} alignItems="stretch">
-          <Card
-            title={"Subtask 1"}
-            deadline={"2024-10-27T14:53:54.381Z"}
-            id={1}
-          />
-          <Card
-            title={"Subtask 2"}
-            deadline={"2024-10-27T14:53:54.381Z"}
-            id={2}
-          />
+          {todo.subTodos?.map((subTodo) => (
+            <Card
+              title={subTodo.name}
+              deadline={subTodo.deadline}
+              key={subTodo.id}
+            />
+          ))}
         </VStack>
       </Container>
-      <AddSubtaskModal isOpen={isOpen} onClose={onClose} />
+      <AddSubtaskModal isOpen={isOpen} onClose={onClose} todoId={id} />
     </>
   );
 }
 
-export default TodoPage;
+export default observer(TodoPage);

@@ -11,6 +11,7 @@ class TodosState {
     makeObservable(this, {
       todos: observable,
       addTodo: action,
+      updateTodo: action,
     });
 
     const todos = getFromLocalStorage(TODOS);
@@ -26,7 +27,12 @@ class TodosState {
       isUniqueId = !this.todos.find((todo) => todo.id === id);
     }
 
-    this.todos.push({ name, color, id });
+    this.todos.push({ name, color, id, subTodos: [] });
+  }
+
+  updateTodo(todoId, todo) {
+    const index = this.todos.findIndex((todo) => todo.id === todoId);
+    this.todos[index] = todo;
   }
 }
 
